@@ -83,12 +83,6 @@ start
 //    tok.setParam();
 //    code.append(Code.genVar(tok));
 //  }
-//| ^(TABLEAU id=IDENT) {
-//    String name = id.getText();
-//    Tokatt tok  = TypeSystem.CheckDecParPointer(name, ts);
-//    tok.setParam();
-//    code.append(Code.genVar(tok));
-//  }
 //;
 
 instruction [TableSymboles ts] returns [Code code]
@@ -102,9 +96,9 @@ instruction [TableSymboles ts] returns [Code code]
 | c3=impression[ts] {
       code.append(c3);
   }
-//| c4=lecture[ts] {
-//      code.append(c4);
-//  } 
+| c4=lecture[ts] {
+      code.append(c4);
+  } 
 //| c5=conditionnelle[ts] {
 //      code.append(c5);
 //  }
@@ -126,7 +120,8 @@ affectation [TableSymboles ts] returns [Code code]
      Type   ty    = TypeSystem.CheckIdent(name, ts);
      Tokatt tok   = (Tokatt) ts.Lookup(name);
      
-     TypeSystem.CheckAssign(ty, exp.type);      
+     TypeSystem.CheckAssign(ty, exp.type); 
+     code.append(exp.code);     
      code.append(new Inst3a(Inst3a.TAC_COPY, tok, exp.place, null));
   })
 ;
@@ -147,8 +142,6 @@ impression [TableSymboles ts] returns [Code code]
           tok = new Tokatt("L2", TypeSystem.T_label);
       else if (exp.type == TypeSystem.T_c_text)         
           tok = new Tokatt("L4", TypeSystem.T_label);
-      else if (exp.type == TypeSystem.T_c_integer)
-	        tok = new Tokatt("L8", TypeSystem.T_label);
       code.append(new Inst3a(Inst3a.TAC_CALL, null, tok, null));
   })+)
 ;
@@ -170,11 +163,29 @@ item_imp [TableSymboles ts] returns [Expratt exp]
   }
 ;
 
+lecture [TableSymboles ts] returns [Code code]
+@init{code = new Code();}
+: ^(READ_KW (c=item_lec[ts] {
+      code.append(c);
+  })+)
+;
+
+item_lec [TableSymboles ts] returns [Code code]
+@init{code = new Code();}
+: id=IDENT {
+    String name = id.getText();
+    Type   ty   = TypeSystem.CheckIdent(name, ts);
+    Tokatt tok1 = (Tokatt) ts.Lookup(name);
+    Tokatt tok2 = new Tokatt("L8", TypeSystem.T_label);
+    code.append(new Inst3a(Inst3a.TAC_CALL, tok1, tok2, null));
+  } 
+;
+
 expression [TableSymboles ts] returns [Expratt exp]
   @init{exp = null;}
   : ^(PLUS exp1=expression[ts] exp2=expression[ts]) {
       Type   ty   = TypeSystem.CheckBinOp(exp1.type, exp2.type);
-      Tokatt temp = SymbDistrib.newTemp();
+      Tokatt temp = SymbDistrib.newTemp();   
       Code   code = Code.genBinOp(Inst3a.TAC_ADD, exp1, exp2, temp);
       exp = new Expratt(ty, code, temp);
      }
@@ -211,7 +222,7 @@ facteur [TableSymboles ts] returns [Expratt exp]
   }
 | i=INTEGER {
     int ival = Integer.parseInt(i.getText());
-    exp = new Expratt(TypeSystem.T_c_integer, new Code(), new Tokatt(ival));
+    exp = new Expratt(TypeSystem.T_integer, new Code(), new Tokatt(ival));
   }
 ;
 
