@@ -26,7 +26,4 @@ public class Code extends Code3a{
 		  return cod;
 	 }
 
-
-
-
 } // Code ***

@@ -8,8 +8,12 @@ options {
 
 @treeparser::header{package frontend; import backend.*;}
 
+start 
+@init{TableSymboles ts = new TableSymboles();}
+: bloc[ts];
+
 //program returns [Code code]
-//@init{code = new Code(); TableSymboles ts = new TableSymboles();}
+//@init{TableSymbole ts = new TableSymboles(); code = new Code();}
 //: ^(PROG (c=unite[ts] {
 //    code.append(c);
 //  })+)
@@ -24,7 +28,7 @@ options {
 //    code.append(c);
 //  }
 //;
-//  
+  
 //fonction [TableSymboles ts] returns [Code code] 
 //@init{code = new Code();}
 //: ^(FUNC_KW 
@@ -36,7 +40,7 @@ options {
 //    ts.Enter_Scope();
 //  }
 //  codes=parametres[ts] {
-//    for(int i = 0 ; i < par.size() ; i++) {
+//    for(int i = 0 ; i < codes.size() ; i++) {
 //      code.append(codes.at(i));
 //    }
 //  }    
@@ -59,29 +63,30 @@ options {
 //    ts.Insert(name, tok);
 //  }
 //;
-//  
+  
 //type returns [Type type]
 //@init{type = null;}
 //: INT_KW^ {type = TypeSystem.T_integer;}
 //| VOID_KW^ {type = TypeSystem.T_void;}
 //;
-//
-//
+
 //parametres [TableSymboles ts] returns [ArrayList<Code> codes]
 //@init{codes = new ArrayList<Code>();}
 //: ^(PARAMETRE (c=parametre[ts] {code.add(c);})*)
 //;
-//
+
 //parametre [TableSymboles ts] returns [Code code] 
 //@init {code = new Code();}
 //: id=IDENT {
 //    String name = id.getText();
 //    Tokatt tok  = TypeSystem.CheckDecParIdent(name, ts);
+//    tok.setParam();
 //    code.append(Code.genVar(tok));
 //  }
 //| ^(TABLEAU id=IDENT) {
 //    String name = id.getText();
 //    Tokatt tok  = TypeSystem.CheckDecParPointer(name, ts);
+//    tok.setParam();
 //    code.append(Code.genVar(tok));
 //  }
 //;
@@ -91,38 +96,78 @@ instruction [TableSymboles ts] returns [Code code]
 : c1=affectation[ts] {
       code.append(c1);
   }
-  //| retourne[ts, code]
-  //| impression[ts, code]
-  //| ordreLecture[ts, code] 
-  //| conditionnelle[ts, code] 
-  //| appelFonction[ts, code] 
-  //| iteration[ts, code] 
-| c8 = bloc[ts] {
+| c2=retourne[ts] {
+      code.append(c2);
+  }
+| c3=impression[ts] {
+      code.append(c3);
+  }
+//| c4=lecture[ts] {
+//      code.append(c4);
+//  } 
+//| c5=conditionnelle[ts] {
+//      code.append(c5);
+//  }
+//| c6=appelFonction[ts] {
+//      code.append(c6);
+//  } 
+//| c7=iteration[ts] {
+//      code.append(c7);
+//  } 
+| c8=bloc[ts] {
 	  code.append(c8);
 	}
 ;
 
 affectation [TableSymboles ts] returns [Code code]
 @init{code = new Code();}
-: ^(ASSIGN_KW id=IDENT {
-     String name = id.getText();
-     Type   ty   = TypeSystem.CheckIdent(name, ts);
-     Tokatt tok  = (Tokatt) ts.Lookup(name);
-     Expratt exp1 = new Expratt(ty, new Code(), tok);
-  }
-  exp=expression[ts] {
+: ^(ASSIGN_KW id=IDENT exp=expression[ts] {
+     String name  = id.getText();
+     Type   ty    = TypeSystem.CheckIdent(name, ts);
+     Tokatt tok   = (Tokatt) ts.Lookup(name);
+     
      TypeSystem.CheckAssign(ty, exp.type);      
-     Tokatt temp = SymbDistrib.newTemp();
-     code.append(Code.genBinOp(Inst3a.TAC_COPY, exp1, exp, temp));
+     code.append(new Inst3a(Inst3a.TAC_COPY, tok, exp.place, null));
   })
-| ^(ASSIGN_KW tok1=tableau_elem[ts] exp=expression[ts] {
-    Expratt exp1 = new Expratt(TypeSystem.T_integer, new Code(), tok1);
-    TypeSystem.CheckAssign(tok1.type, exp.type);      
-    Tokatt temp = SymbDistrib.newTemp();
-    
-    code.append(exp.code);
-    code.append(Code.genBinOp(Inst3a.TAC_TABVAR, exp1, exp, temp));
-  })
+;
+
+retourne [TableSymboles ts] returns [Code code] 
+@init{code = new Code();}
+: ^(RETURN_KW exp=expression[ts]) {
+    code.append(new Inst3a(Inst3a.TAC_RETURN, exp.place, null, null));
+  }
+;
+
+impression [TableSymboles ts] returns [Code code]
+@init{code = new Code();}
+: ^(PRINT_KW (exp=item_imp[ts] {
+      code.append(exp.code);
+      Tokatt tok = null;
+      if (exp.type == TypeSystem.T_integer)  
+          tok = new Tokatt("L2", TypeSystem.T_label);
+      else if (exp.type == TypeSystem.T_c_text)         
+          tok = new Tokatt("L4", TypeSystem.T_label);
+      else if (exp.type == TypeSystem.T_c_integer)
+	        tok = new Tokatt("L8", TypeSystem.T_label);
+      code.append(new Inst3a(Inst3a.TAC_CALL, null, tok, null));
+  })+)
+;
+
+item_imp [TableSymboles ts] returns [Expratt exp] 
+@init{exp = null;}
+: text=TEXT {
+    String n    = text.getText();
+    Tokatt tok  = new Tokatt(n);
+    Code   code = new Code(new Inst3a(Inst3a.TAC_ARG, tok, null, null));
+    code.appendData(tok);
+    exp = new Expratt(TypeSystem.T_c_text, code, null); 
+  }
+| exp1=expression[ts] {
+    Code code = new Code();
+    code.append(exp1.code);
+    code.append(new Inst3a(Inst3a.TAC_ARG, exp1.place, null, null));
+    exp = new Expratt(exp1.type, code, exp1.place);
+  }
 ;
 
 expression [TableSymboles ts] returns [Expratt exp]
@@ -164,22 +209,9 @@ facteur [TableSymboles ts] returns [Expratt exp]
     Tokatt tok  = (Tokatt) ts.Lookup(name);
     exp = new Expratt(ty, new Code(), tok);
   }
-| tok1 = tableau_elem[ts] {
-    Code   code = Code.genVar(tok1);
-    exp = new Expratt(TypeSystem.T_integer, code, tok1);
-  } 
 | i=INTEGER {
     int ival = Integer.parseInt(i.getText());
-    exp = new Expratt(TypeSystem.T_integer, new Code(), new Tokatt(ival));
-  }
-;
-  
-tableau_elem [TableSymboles ts] returns [Tokatt tok] 
-@init{tok = null;}
-: ^(TABLEAU_ELEMENT id=IDENT exp=expression[ts]) {
-    String name = id.getText();
-    Type ty = TypeSystem.CheckIdent(name, ts);
-    tok = new Tokatt(name, ty);
+    exp = new Expratt(TypeSystem.T_c_integer, new Code(), new Tokatt(ival));
   }
 ;
 
@@ -212,26 +244,4 @@ item_dec [TableSymboles ts] returns [Code code]
     Tokatt tok  = TypeSystem.CheckDecIdent(name, ts);
     code.append(Code.genVar(tok));
   }
-  | c=tableau_dec[ts] {
-    code.append(c);
-  }
 ;
-
-tableau_dec [TableSymboles ts] returns [Code code] 
-  @init{code = new Code();}
-  : ^(TABLEAU_DECLARATION id=IDENT taille=INTEGER) {
-        String name = id.getText();
-        int    dim  = Integer.parseInt(taille.getText());
-        Tokatt tok  = TypeSystem.CheckDecArray(name, dim, ts);
-        code.append(Code.genVar(tok));  
-    }
-  ;
-  
-variables [TableSymboles ts]  
-  :
-  ;
- 
-  
-parametres [TableSymboles ts]          
-  : expression[ts]
-  ;

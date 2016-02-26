@@ -39,14 +39,14 @@ public class VslExpr {
 			VslLexer lexer = new VslLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			VslParser parser = new VslParser(tokens);
-			VslParser.instruction_return r = parser.instruction();
+			VslParser.bloc_return r = parser.bloc();
 
 
 			//resulting tree
 			CommonTree t = (CommonTree)r.getTree();
 
 			// Print the resulting tree out in LISP notation
-			//System.out.println(t.toStringTree());
+			System.out.println(t.toStringTree());
 
 			CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
 			VslTreeExpr tparser = new VslTreeExpr(nodes);
@@ -54,7 +54,7 @@ public class VslExpr {
 			Code c3a;
 
 			try {
-				c3a = tparser.instruction(new TableSymboles());
+				c3a = tparser.bloc(new TableSymboles());
 				c3a.print();
 				
 //				CodeGenerator cg = new CodeGenerator(output);
