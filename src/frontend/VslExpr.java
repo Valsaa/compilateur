@@ -39,7 +39,7 @@ public class VslExpr {
 			VslLexer lexer = new VslLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			VslParser parser = new VslParser(tokens);
-			VslParser.bloc_return r = parser.bloc();
+			VslParser.program_return r = parser.program();
 
 
 			//resulting tree
@@ -54,7 +54,7 @@ public class VslExpr {
 			Code c3a;
 
 			try {
-				c3a = tparser.bloc(new TableSymboles());
+				c3a = tparser.program();
 				c3a.print();
 				
 //				CodeGenerator cg = new CodeGenerator(output);
