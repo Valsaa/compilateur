@@ -7,7 +7,7 @@ options {
 }
 
 tokens {
-  APPEL_FONCTION;
+  APPEL;
   PROGRAMME;
   PARAMETRE;
   CORPS;
@@ -15,8 +15,8 @@ tokens {
   DECLARATION;
   CONDITION;
   TABLEAU;
-  TABLEAU_DECLARATION;
-  TABLEAU_ELEMENT;
+  TAB_DECLARATION;
+  TAB_ELEMENT;
   BLOC;
 }
 
@@ -40,7 +40,7 @@ parametres     : parametre (VIRG parametre)
 parametre      : IDENT | IDENT CG CD 
                  -> ^(TABLEAU IDENT);
 
-instruction    : affectation | retourne | impression | lecture | conditionnelle | appelFonction | iteration | bloc;
+instruction    : affectation | retourne | impression | lecture | conditionnelle | appel | iteration | bloc;
 
 affectation    : IDENT ASSIGN_KW^ expression | tableau_elem ASSIGN_KW expression 
                  -> ^(ASSIGN_KW tableau_elem expression);
@@ -49,10 +49,10 @@ expression     : terme ((PLUS^| MOINS^) terme)*;
 
 terme          : facteur ((MUL^| DIV^) facteur)*;
 
-facteur        : IDENT | tableau_elem | appelFonction | INTEGER | PG! expression PD!;
+facteur        : IDENT | tableau_elem | appel | INTEGER | PG! expression PD!;
 
 tableau_elem   : IDENT CG expression CD
-                 -> ^(TABLEAU_ELEMENT IDENT expression);                 
+                 -> ^(TAB_ELEMENT IDENT expression);                 
 
 retourne       : RETURN_KW^ expression;
 
@@ -70,8 +70,8 @@ item_lec       : IDENT | tableau_elem;
 
 conditionnelle : IF_KW^ expression THEN_KW! instruction (ELSE_KW! instruction)? FI_KW!;
 
-appelFonction  : IDENT PG arguments? PD
-                 -> ^(APPEL_FONCTION IDENT arguments?);
+appel          : IDENT PG arguments? PD
+                 -> ^(APPEL IDENT arguments?);
 
 arguments      : expression (VIRG! expression)*;
 
@@ -95,6 +95,6 @@ declaration    : item_dec (VIRG! item_dec)*;
 item_dec       : IDENT | tableau_dec;
 
 tableau_dec    : IDENT CG INTEGER CD 
-                 -> ^(TABLEAU_DECLARATION IDENT INTEGER);
+                 -> ^(TAB_DECLARATION IDENT INTEGER);
 
 

@@ -33,10 +33,7 @@ fonction [TableSymboles ts] returns [Code code]
   ty=type id=IDENT {    
     String name = id.getText();
     Tokatt tok = null;
-    if(!name.equals("main"))
-      tok = TypeSystem.CheckFuncDec(name, new TypeFunction(ty), ts);
-    else
-      tok = new Tokatt(new TypeFunction(ty), name, 0);
+    tok = new Tokatt(new TypeFunction(ty), SymbDistrib.newLabel().name, 0);
     code.append(new Inst3a(Inst3a.TAC_LABEL, tok, null, null));
     code.append(new Inst3a(Inst3a.TAC_BEGINFUNC, null, null, null));
     ts.Enter_Scope();
@@ -104,14 +101,23 @@ instruction [TableSymboles ts] returns [Code code]
 | c5=conditionnelle[ts] {
       code.append(c5);
   }
-//| c6=appelFonction[ts] {
-//      code.append(c6);
-//  } 
-| c7=iteration[ts] {
-      code.append(c7);
+| ^(APPEL id=IDENT { 
+    String name = id.getText();    
+    Tokatt tok  = SymbDistrib.newTemp();
+    code.append(new Inst3a(Inst3a.TAC_ARG, tok, null, null));
   } 
-| c8=bloc[ts] {
-	  code.append(c8);
+  (exp=expression[ts] {
+    code.append(exp.code); 
+    code.append(new Inst3a(Inst3a.TAC_ARG, exp.place, null, null));
+  })*) {
+    //Type ty = TypeSystem.CheckFuncCall(name,,ts);
+    
+  }
+| c6=iteration[ts] {
+      code.append(c6);
+  } 
+| c7=bloc[ts] {
+	  code.append(c7);
 	}
 ;
 
@@ -170,6 +176,21 @@ facteur [TableSymboles ts] returns [Expratt exp]
 | i=INTEGER {
     int ival = Integer.parseInt(i.getText());
     exp = new Expratt(TypeSystem.T_integer, new Code(), new Tokatt(ival));
+  }
+| ^(APPEL id=IDENT {
+    String name = id.getText();
+    Tokatt tok  = SymbDistrib.newTemp();
+    Code   code = new Code();  
+    code.append(new Inst3a(Inst3a.TAC_ARG, tok, null, null));
+  } 
+  (e=expression[ts] {  
+    code.append(exp.code); 
+    code.append(new Inst3a(Inst3a.TAC_ARG, e.place, null, null));
+  })*) {
+    //Type   ty   = TypeSystem.CheckFuncCall(name,,ts);
+    Tokatt tok1 = ts.Lookup(name);
+    code.append(new Inst3a(Inst3a.TAC_CALL, tok, tok1, null));
+    exp = new Expratt(TypeSystem.T_integer, code, tok);
   }
 ;
 
@@ -251,7 +272,19 @@ conditionnelle [TableSymboles ts] returns [Code code]
 
 iteration [TableSymboles ts] returns [Code code] 
 @init{code = new Code();}
-: ^(WHILE_KW exp=expression[ts] c=instruction[ts])
+: ^(WHILE_KW exp=expression[ts] {
+    Tokatt tok = SymbDistrib.newLabel();    
+    code.append(new Inst3a(Inst3a.TAC_LABEL, tok, null, null));
+    
+    Tokatt tok1 = SymbDistrib.newLabel();
+    code.append(exp.code);
+    code.append(new Inst3a(Inst3a.TAC_IFZ, exp.place, tok1, null));
+  } 
+  c=instruction[ts] {
+    code.append(c);
+    code.append(new Inst3a(Inst3a.TAC_GOTO, tok, null, null));    
+    code.append(new Inst3a(Inst3a.TAC_LABEL, tok1, null, null));
+  }) 
 ;
 
 bloc [TableSymboles ts] returns [Code code]     

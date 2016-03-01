@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g 2016-02-26 23:58:32
+// $ANTLR 3.4 /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g 2016-02-27 12:03:03
 package frontend; import backend.*;
 
 import org.antlr.runtime.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @SuppressWarnings({"all", "warnings", "unchecked"})
 public class VslTreeExpr extends TreeParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "AD", "AG", "ASCII", "ASSIGN_KW", "CD", "CG", "COMMENT", "DIGIT", "DIV", "DO_KW", "ELSE_KW", "FI_KW", "FUNC_KW", "IDENT", "IF_KW", "INTEGER", "INT_KW", "LETTER", "MOINS", "MUL", "OD_KW", "PD", "PG", "PLUS", "PRINT_KW", "PROTO_KW", "READ_KW", "RETURN_KW", "TEXT", "THEN_KW", "VIRG", "VOID_KW", "WHILE_KW", "WS", "APPEL_FONCTION", "BLOC", "CONDITION", "CORPS", "DECLARATION", "INSTRUCTION", "PARAMETRE", "PROGRAMME", "TABLEAU", "TABLEAU_DECLARATION", "TABLEAU_ELEMENT"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "AD", "AG", "ASCII", "ASSIGN_KW", "CD", "CG", "COMMENT", "DIGIT", "DIV", "DO_KW", "ELSE_KW", "FI_KW", "FUNC_KW", "IDENT", "IF_KW", "INTEGER", "INT_KW", "LETTER", "MOINS", "MUL", "OD_KW", "PD", "PG", "PLUS", "PRINT_KW", "PROTO_KW", "READ_KW", "RETURN_KW", "TEXT", "THEN_KW", "VIRG", "VOID_KW", "WHILE_KW", "WS", "APPEL", "BLOC", "CONDITION", "CORPS", "DECLARATION", "INSTRUCTION", "PARAMETRE", "PROGRAMME", "TABLEAU", "TAB_DECLARATION", "TAB_ELEMENT"
     };
 
     public static final int EOF=-1;
@@ -48,7 +48,7 @@ public class VslTreeExpr extends TreeParser {
     public static final int VOID_KW=35;
     public static final int WHILE_KW=36;
     public static final int WS=37;
-    public static final int APPEL_FONCTION=38;
+    public static final int APPEL=38;
     public static final int BLOC=39;
     public static final int CONDITION=40;
     public static final int CORPS=41;
@@ -57,8 +57,8 @@ public class VslTreeExpr extends TreeParser {
     public static final int PARAMETRE=44;
     public static final int PROGRAMME=45;
     public static final int TABLEAU=46;
-    public static final int TABLEAU_DECLARATION=47;
-    public static final int TABLEAU_ELEMENT=48;
+    public static final int TAB_DECLARATION=47;
+    public static final int TAB_ELEMENT=48;
 
     // delegates
     public TreeParser[] getDelegates() {
@@ -295,10 +295,7 @@ public class VslTreeExpr extends TreeParser {
                 
                 String name = id.getText();
                 Tokatt tok = null;
-                if(!name.equals("main"))
-                  tok = TypeSystem.CheckFuncDec(name, new TypeFunction(ty), ts);
-                else
-                  tok = new Tokatt(new TypeFunction(ty), name, 0);
+                tok = new Tokatt(new TypeFunction(ty), SymbDistrib.newLabel().name, 0);
                 code.append(new Inst3a(Inst3a.TAC_LABEL, tok, null, null));
                 code.append(new Inst3a(Inst3a.TAC_BEGINFUNC, null, null, null));
                 ts.Enter_Scope();
@@ -358,7 +355,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "prototype"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:57:1: prototype[TableSymboles ts] returns [Code code] : ^( PROTO_KW ty= type id= IDENT codes= parametres[ts] ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:54:1: prototype[TableSymboles ts] returns [Code code] : ^( PROTO_KW ty= type id= IDENT codes= parametres[ts] ) ;
     public final Code prototype(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -371,8 +368,8 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:59:3: ( ^( PROTO_KW ty= type id= IDENT codes= parametres[ts] ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:59:3: ^( PROTO_KW ty= type id= IDENT codes= parametres[ts] )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:56:3: ( ^( PROTO_KW ty= type id= IDENT codes= parametres[ts] ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:56:3: ^( PROTO_KW ty= type id= IDENT codes= parametres[ts] )
             {
             match(input,PROTO_KW,FOLLOW_PROTO_KW_in_prototype201); 
 
@@ -421,14 +418,14 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "type"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:69:1: type returns [Type type] : ( ^( INT_KW ) | ^( VOID_KW ) );
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:66:1: type returns [Type type] : ( ^( INT_KW ) | ^( VOID_KW ) );
     public final Type type() throws RecognitionException {
         Type type = null;
 
 
         type = null;
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:71:3: ( ^( INT_KW ) | ^( VOID_KW ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:68:3: ( ^( INT_KW ) | ^( VOID_KW ) )
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -447,7 +444,7 @@ public class VslTreeExpr extends TreeParser {
             }
             switch (alt3) {
                 case 1 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:71:3: ^( INT_KW )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:68:3: ^( INT_KW )
                     {
                     match(input,INT_KW,FOLLOW_INT_KW_in_type237); 
 
@@ -462,7 +459,7 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:72:3: ^( VOID_KW )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:69:3: ^( VOID_KW )
                     {
                     match(input,VOID_KW,FOLLOW_VOID_KW_in_type245); 
 
@@ -494,7 +491,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "parametres"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:75:1: parametres[TableSymboles ts] returns [ArrayList<Code> codes] : ^( PARAMETRE (c= parametre[ts] )* ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:72:1: parametres[TableSymboles ts] returns [ArrayList<Code> codes] : ^( PARAMETRE (c= parametre[ts] )* ) ;
     public final ArrayList<Code> parametres(TableSymboles ts) throws RecognitionException {
         ArrayList<Code> codes = null;
 
@@ -504,14 +501,14 @@ public class VslTreeExpr extends TreeParser {
 
         codes = new ArrayList<Code>();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:77:3: ( ^( PARAMETRE (c= parametre[ts] )* ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:77:3: ^( PARAMETRE (c= parametre[ts] )* )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:74:3: ( ^( PARAMETRE (c= parametre[ts] )* ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:74:3: ^( PARAMETRE (c= parametre[ts] )* )
             {
             match(input,PARAMETRE,FOLLOW_PARAMETRE_in_parametres270); 
 
             if ( input.LA(1)==Token.DOWN ) {
                 match(input, Token.DOWN, null); 
-                // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:77:15: (c= parametre[ts] )*
+                // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:74:15: (c= parametre[ts] )*
                 loop4:
                 do {
                     int alt4=2;
@@ -524,7 +521,7 @@ public class VslTreeExpr extends TreeParser {
 
                     switch (alt4) {
                 	case 1 :
-                	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:77:16: c= parametre[ts]
+                	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:74:16: c= parametre[ts]
                 	    {
                 	    pushFollow(FOLLOW_parametre_in_parametres275);
                 	    c=parametre(ts);
@@ -565,7 +562,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "parametre"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:80:1: parametre[TableSymboles ts] returns [Code code] : id= IDENT ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:77:1: parametre[TableSymboles ts] returns [Code code] : id= IDENT ;
     public final Code parametre(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -574,8 +571,8 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:82:3: (id= IDENT )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:82:3: id= IDENT
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:79:3: (id= IDENT )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:79:3: id= IDENT
             {
             id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_parametre304); 
 
@@ -604,11 +601,12 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "instruction"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:90:1: instruction[TableSymboles ts] returns [Code code] : (c1= affectation[ts] |c2= retourne[ts] |c3= impression[ts] |c4= lecture[ts] |c5= conditionnelle[ts] |c7= iteration[ts] |c8= bloc[ts] );
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:87:1: instruction[TableSymboles ts] returns [Code code] : (c1= affectation[ts] |c2= retourne[ts] |c3= impression[ts] |c4= lecture[ts] |c5= conditionnelle[ts] | ^( APPEL id= IDENT (exp= expression[ts] )* ) |c6= iteration[ts] |c7= bloc[ts] );
     public final Code instruction(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
 
+        CommonTree id=null;
         Code c1 =null;
 
         Code c2 =null;
@@ -619,62 +617,69 @@ public class VslTreeExpr extends TreeParser {
 
         Code c5 =null;
 
-        Code c7 =null;
+        Expratt exp =null;
 
-        Code c8 =null;
+        Code c6 =null;
+
+        Code c7 =null;
 
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:92:3: (c1= affectation[ts] |c2= retourne[ts] |c3= impression[ts] |c4= lecture[ts] |c5= conditionnelle[ts] |c7= iteration[ts] |c8= bloc[ts] )
-            int alt5=7;
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:89:3: (c1= affectation[ts] |c2= retourne[ts] |c3= impression[ts] |c4= lecture[ts] |c5= conditionnelle[ts] | ^( APPEL id= IDENT (exp= expression[ts] )* ) |c6= iteration[ts] |c7= bloc[ts] )
+            int alt6=8;
             switch ( input.LA(1) ) {
             case ASSIGN_KW:
                 {
-                alt5=1;
+                alt6=1;
                 }
                 break;
             case RETURN_KW:
                 {
-                alt5=2;
+                alt6=2;
                 }
                 break;
             case PRINT_KW:
                 {
-                alt5=3;
+                alt6=3;
                 }
                 break;
             case READ_KW:
                 {
-                alt5=4;
+                alt6=4;
                 }
                 break;
             case IF_KW:
                 {
-                alt5=5;
+                alt6=5;
+                }
+                break;
+            case APPEL:
+                {
+                alt6=6;
                 }
                 break;
             case WHILE_KW:
                 {
-                alt5=6;
+                alt6=7;
                 }
                 break;
             case BLOC:
                 {
-                alt5=7;
+                alt6=8;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 5, 0, input);
+                    new NoViableAltException("", 6, 0, input);
 
                 throw nvae;
 
             }
 
-            switch (alt5) {
+            switch (alt6) {
                 case 1 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:92:3: c1= affectation[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:89:3: c1= affectation[ts]
                     {
                     pushFollow(FOLLOW_affectation_in_instruction327);
                     c1=affectation(ts);
@@ -689,7 +694,7 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:95:3: c2= retourne[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:92:3: c2= retourne[ts]
                     {
                     pushFollow(FOLLOW_retourne_in_instruction336);
                     c2=retourne(ts);
@@ -704,7 +709,7 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 3 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:98:3: c3= impression[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:95:3: c3= impression[ts]
                     {
                     pushFollow(FOLLOW_impression_in_instruction345);
                     c3=impression(ts);
@@ -719,7 +724,7 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 4 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:101:3: c4= lecture[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:98:3: c4= lecture[ts]
                     {
                     pushFollow(FOLLOW_lecture_in_instruction354);
                     c4=lecture(ts);
@@ -734,7 +739,7 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 5 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:104:3: c5= conditionnelle[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:101:3: c5= conditionnelle[ts]
                     {
                     pushFollow(FOLLOW_conditionnelle_in_instruction364);
                     c5=conditionnelle(ts);
@@ -749,31 +754,90 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 6 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:110:3: c7= iteration[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:104:3: ^( APPEL id= IDENT (exp= expression[ts] )* )
                     {
-                    pushFollow(FOLLOW_iteration_in_instruction376);
-                    c7=iteration(ts);
+                    match(input,APPEL,FOLLOW_APPEL_in_instruction372); 
 
-                    state._fsp--;
+                    match(input, Token.DOWN, null); 
+                    id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_instruction376); 
+
+                     
+                        String name = id.getText();    
+                        Tokatt tok  = SymbDistrib.newTemp();
+                        code.append(new Inst3a(Inst3a.TAC_ARG, tok, null, null));
+                      
+
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:109:3: (exp= expression[ts] )*
+                    loop5:
+                    do {
+                        int alt5=2;
+                        int LA5_0 = input.LA(1);
+
+                        if ( (LA5_0==DIV||LA5_0==IDENT||LA5_0==INTEGER||(LA5_0 >= MOINS && LA5_0 <= MUL)||LA5_0==PLUS||LA5_0==APPEL) ) {
+                            alt5=1;
+                        }
+
+
+                        switch (alt5) {
+                    	case 1 :
+                    	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:109:4: exp= expression[ts]
+                    	    {
+                    	    pushFollow(FOLLOW_expression_in_instruction386);
+                    	    exp=expression(ts);
+
+                    	    state._fsp--;
 
 
 
-                          code.append(c7);
+                    	        code.append(exp.code); 
+                    	        code.append(new Inst3a(Inst3a.TAC_ARG, exp.place, null, null));
+                    	      
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    break loop5;
+                        }
+                    } while (true);
+
+
+                    match(input, Token.UP, null); 
+
+
+
+                        //Type ty = TypeSystem.CheckFuncCall(name,,ts);
+                        
                       
 
                     }
                     break;
                 case 7 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:113:3: c8= bloc[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:116:3: c6= iteration[ts]
                     {
-                    pushFollow(FOLLOW_bloc_in_instruction386);
-                    c8=bloc(ts);
+                    pushFollow(FOLLOW_iteration_in_instruction400);
+                    c6=iteration(ts);
 
                     state._fsp--;
 
 
 
-                    	  code.append(c8);
+                          code.append(c6);
+                      
+
+                    }
+                    break;
+                case 8 :
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:119:3: c7= bloc[ts]
+                    {
+                    pushFollow(FOLLOW_bloc_in_instruction410);
+                    c7=bloc(ts);
+
+                    state._fsp--;
+
+
+
+                    	  code.append(c7);
                     	
 
                     }
@@ -796,7 +860,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "affectation"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:118:1: affectation[TableSymboles ts] returns [Code code] : ^( ASSIGN_KW id= IDENT exp= expression[ts] ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:124:1: affectation[TableSymboles ts] returns [Code code] : ^( ASSIGN_KW id= IDENT exp= expression[ts] ) ;
     public final Code affectation(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -807,15 +871,15 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:120:3: ( ^( ASSIGN_KW id= IDENT exp= expression[ts] ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:120:3: ^( ASSIGN_KW id= IDENT exp= expression[ts] )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:126:3: ( ^( ASSIGN_KW id= IDENT exp= expression[ts] ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:126:3: ^( ASSIGN_KW id= IDENT exp= expression[ts] )
             {
-            match(input,ASSIGN_KW,FOLLOW_ASSIGN_KW_in_affectation409); 
+            match(input,ASSIGN_KW,FOLLOW_ASSIGN_KW_in_affectation433); 
 
             match(input, Token.DOWN, null); 
-            id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_affectation413); 
+            id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_affectation437); 
 
-            pushFollow(FOLLOW_expression_in_affectation417);
+            pushFollow(FOLLOW_expression_in_affectation441);
             exp=expression(ts);
 
             state._fsp--;
@@ -852,7 +916,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "expression"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:131:1: expression[TableSymboles ts] returns [Expratt exp] : ( ^( PLUS exp1= expression[ts] exp2= expression[ts] ) | ^( MOINS exp1= expression[ts] exp2= expression[ts] ) | ^( MUL exp1= expression[ts] exp2= expression[ts] ) | ^( DIV exp1= expression[ts] exp2= expression[ts] ) |exp1= facteur[ts] );
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:137:1: expression[TableSymboles ts] returns [Expratt exp] : ( ^( PLUS exp1= expression[ts] exp2= expression[ts] ) | ^( MOINS exp1= expression[ts] exp2= expression[ts] ) | ^( MUL exp1= expression[ts] exp2= expression[ts] ) | ^( DIV exp1= expression[ts] exp2= expression[ts] ) |exp1= facteur[ts] );
     public final Expratt expression(TableSymboles ts) throws RecognitionException {
         Expratt exp = null;
 
@@ -864,57 +928,58 @@ public class VslTreeExpr extends TreeParser {
 
         exp = null;
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:133:3: ( ^( PLUS exp1= expression[ts] exp2= expression[ts] ) | ^( MOINS exp1= expression[ts] exp2= expression[ts] ) | ^( MUL exp1= expression[ts] exp2= expression[ts] ) | ^( DIV exp1= expression[ts] exp2= expression[ts] ) |exp1= facteur[ts] )
-            int alt6=5;
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:139:3: ( ^( PLUS exp1= expression[ts] exp2= expression[ts] ) | ^( MOINS exp1= expression[ts] exp2= expression[ts] ) | ^( MUL exp1= expression[ts] exp2= expression[ts] ) | ^( DIV exp1= expression[ts] exp2= expression[ts] ) |exp1= facteur[ts] )
+            int alt7=5;
             switch ( input.LA(1) ) {
             case PLUS:
                 {
-                alt6=1;
+                alt7=1;
                 }
                 break;
             case MOINS:
                 {
-                alt6=2;
+                alt7=2;
                 }
                 break;
             case MUL:
                 {
-                alt6=3;
+                alt7=3;
                 }
                 break;
             case DIV:
                 {
-                alt6=4;
+                alt7=4;
                 }
                 break;
             case IDENT:
             case INTEGER:
+            case APPEL:
                 {
-                alt6=5;
+                alt7=5;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 6, 0, input);
+                    new NoViableAltException("", 7, 0, input);
 
                 throw nvae;
 
             }
 
-            switch (alt6) {
+            switch (alt7) {
                 case 1 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:133:5: ^( PLUS exp1= expression[ts] exp2= expression[ts] )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:139:5: ^( PLUS exp1= expression[ts] exp2= expression[ts] )
                     {
-                    match(input,PLUS,FOLLOW_PLUS_in_expression445); 
+                    match(input,PLUS,FOLLOW_PLUS_in_expression469); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression449);
+                    pushFollow(FOLLOW_expression_in_expression473);
                     exp1=expression(ts);
 
                     state._fsp--;
 
 
-                    pushFollow(FOLLOW_expression_in_expression454);
+                    pushFollow(FOLLOW_expression_in_expression478);
                     exp2=expression(ts);
 
                     state._fsp--;
@@ -933,18 +998,18 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:139:5: ^( MOINS exp1= expression[ts] exp2= expression[ts] )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:145:5: ^( MOINS exp1= expression[ts] exp2= expression[ts] )
                     {
-                    match(input,MOINS,FOLLOW_MOINS_in_expression465); 
+                    match(input,MOINS,FOLLOW_MOINS_in_expression489); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression469);
+                    pushFollow(FOLLOW_expression_in_expression493);
                     exp1=expression(ts);
 
                     state._fsp--;
 
 
-                    pushFollow(FOLLOW_expression_in_expression474);
+                    pushFollow(FOLLOW_expression_in_expression498);
                     exp2=expression(ts);
 
                     state._fsp--;
@@ -963,18 +1028,18 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 3 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:145:5: ^( MUL exp1= expression[ts] exp2= expression[ts] )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:151:5: ^( MUL exp1= expression[ts] exp2= expression[ts] )
                     {
-                    match(input,MUL,FOLLOW_MUL_in_expression484); 
+                    match(input,MUL,FOLLOW_MUL_in_expression508); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression488);
+                    pushFollow(FOLLOW_expression_in_expression512);
                     exp1=expression(ts);
 
                     state._fsp--;
 
 
-                    pushFollow(FOLLOW_expression_in_expression493);
+                    pushFollow(FOLLOW_expression_in_expression517);
                     exp2=expression(ts);
 
                     state._fsp--;
@@ -993,18 +1058,18 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 4 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:151:5: ^( DIV exp1= expression[ts] exp2= expression[ts] )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:157:5: ^( DIV exp1= expression[ts] exp2= expression[ts] )
                     {
-                    match(input,DIV,FOLLOW_DIV_in_expression503); 
+                    match(input,DIV,FOLLOW_DIV_in_expression527); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_expression_in_expression507);
+                    pushFollow(FOLLOW_expression_in_expression531);
                     exp1=expression(ts);
 
                     state._fsp--;
 
 
-                    pushFollow(FOLLOW_expression_in_expression512);
+                    pushFollow(FOLLOW_expression_in_expression536);
                     exp2=expression(ts);
 
                     state._fsp--;
@@ -1023,9 +1088,9 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 5 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:157:5: exp1= facteur[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:163:5: exp1= facteur[ts]
                     {
-                    pushFollow(FOLLOW_facteur_in_expression525);
+                    pushFollow(FOLLOW_facteur_in_expression549);
                     exp1=facteur(ts);
 
                     state._fsp--;
@@ -1055,38 +1120,49 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "facteur"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:162:1: facteur[TableSymboles ts] returns [Expratt exp] : (id= IDENT |i= INTEGER );
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:168:1: facteur[TableSymboles ts] returns [Expratt exp] : (id= IDENT |i= INTEGER | ^( APPEL id= IDENT (e= expression[ts] )* ) );
     public final Expratt facteur(TableSymboles ts) throws RecognitionException {
         Expratt exp = null;
 
 
         CommonTree id=null;
         CommonTree i=null;
+        Expratt e =null;
+
 
         exp = null;
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:164:3: (id= IDENT |i= INTEGER )
-            int alt7=2;
-            int LA7_0 = input.LA(1);
-
-            if ( (LA7_0==IDENT) ) {
-                alt7=1;
-            }
-            else if ( (LA7_0==INTEGER) ) {
-                alt7=2;
-            }
-            else {
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:170:3: (id= IDENT |i= INTEGER | ^( APPEL id= IDENT (e= expression[ts] )* ) )
+            int alt9=3;
+            switch ( input.LA(1) ) {
+            case IDENT:
+                {
+                alt9=1;
+                }
+                break;
+            case INTEGER:
+                {
+                alt9=2;
+                }
+                break;
+            case APPEL:
+                {
+                alt9=3;
+                }
+                break;
+            default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 7, 0, input);
+                    new NoViableAltException("", 9, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt7) {
+
+            switch (alt9) {
                 case 1 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:164:3: id= IDENT
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:170:3: id= IDENT
                     {
-                    id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_facteur558); 
+                    id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_facteur582); 
 
 
                         String name = id.getText();
@@ -1098,13 +1174,75 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:170:3: i= INTEGER
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:176:3: i= INTEGER
                     {
-                    i=(CommonTree)match(input,INTEGER,FOLLOW_INTEGER_in_facteur566); 
+                    i=(CommonTree)match(input,INTEGER,FOLLOW_INTEGER_in_facteur590); 
 
 
                         int ival = Integer.parseInt(i.getText());
                         exp = new Expratt(TypeSystem.T_integer, new Code(), new Tokatt(ival));
+                      
+
+                    }
+                    break;
+                case 3 :
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:180:3: ^( APPEL id= IDENT (e= expression[ts] )* )
+                    {
+                    match(input,APPEL,FOLLOW_APPEL_in_facteur597); 
+
+                    match(input, Token.DOWN, null); 
+                    id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_facteur601); 
+
+
+                        String name = id.getText();
+                        Tokatt tok  = SymbDistrib.newTemp();
+                        Code   code = new Code();  
+                        code.append(new Inst3a(Inst3a.TAC_ARG, tok, null, null));
+                      
+
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:186:3: (e= expression[ts] )*
+                    loop8:
+                    do {
+                        int alt8=2;
+                        int LA8_0 = input.LA(1);
+
+                        if ( (LA8_0==DIV||LA8_0==IDENT||LA8_0==INTEGER||(LA8_0 >= MOINS && LA8_0 <= MUL)||LA8_0==PLUS||LA8_0==APPEL) ) {
+                            alt8=1;
+                        }
+
+
+                        switch (alt8) {
+                    	case 1 :
+                    	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:186:4: e= expression[ts]
+                    	    {
+                    	    pushFollow(FOLLOW_expression_in_facteur611);
+                    	    e=expression(ts);
+
+                    	    state._fsp--;
+
+
+                    	      
+                    	        code.append(exp.code); 
+                    	        code.append(new Inst3a(Inst3a.TAC_ARG, e.place, null, null));
+                    	      
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    break loop8;
+                        }
+                    } while (true);
+
+
+                    match(input, Token.UP, null); 
+
+
+
+                        //Type   ty   = TypeSystem.CheckFuncCall(name,,ts);
+                        Tokatt tok1 = ts.Lookup(name);
+                        code.append(new Inst3a(Inst3a.TAC_CALL, tok, tok1, null));
+                        exp = new Expratt(TypeSystem.T_integer, code, tok);
                       
 
                     }
@@ -1127,7 +1265,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "retourne"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:176:1: retourne[TableSymboles ts] returns [Code code] : ^( RETURN_KW exp= expression[ts] ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:197:1: retourne[TableSymboles ts] returns [Code code] : ^( RETURN_KW exp= expression[ts] ) ;
     public final Code retourne(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1137,13 +1275,13 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:178:3: ( ^( RETURN_KW exp= expression[ts] ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:178:3: ^( RETURN_KW exp= expression[ts] )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:199:3: ( ^( RETURN_KW exp= expression[ts] ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:199:3: ^( RETURN_KW exp= expression[ts] )
             {
-            match(input,RETURN_KW,FOLLOW_RETURN_KW_in_retourne589); 
+            match(input,RETURN_KW,FOLLOW_RETURN_KW_in_retourne640); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_expression_in_retourne593);
+            pushFollow(FOLLOW_expression_in_retourne644);
             exp=expression(ts);
 
             state._fsp--;
@@ -1174,7 +1312,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "impression"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:183:1: impression[TableSymboles ts] returns [Code code] : ^( PRINT_KW (exp= item_imp[ts] )+ ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:204:1: impression[TableSymboles ts] returns [Code code] : ^( PRINT_KW (exp= item_imp[ts] )+ ) ;
     public final Code impression(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1184,29 +1322,29 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:185:3: ( ^( PRINT_KW (exp= item_imp[ts] )+ ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:185:3: ^( PRINT_KW (exp= item_imp[ts] )+ )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:206:3: ( ^( PRINT_KW (exp= item_imp[ts] )+ ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:206:3: ^( PRINT_KW (exp= item_imp[ts] )+ )
             {
-            match(input,PRINT_KW,FOLLOW_PRINT_KW_in_impression617); 
+            match(input,PRINT_KW,FOLLOW_PRINT_KW_in_impression668); 
 
             match(input, Token.DOWN, null); 
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:185:14: (exp= item_imp[ts] )+
-            int cnt8=0;
-            loop8:
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:206:14: (exp= item_imp[ts] )+
+            int cnt10=0;
+            loop10:
             do {
-                int alt8=2;
-                int LA8_0 = input.LA(1);
+                int alt10=2;
+                int LA10_0 = input.LA(1);
 
-                if ( (LA8_0==DIV||LA8_0==IDENT||LA8_0==INTEGER||(LA8_0 >= MOINS && LA8_0 <= MUL)||LA8_0==PLUS||LA8_0==TEXT) ) {
-                    alt8=1;
+                if ( (LA10_0==DIV||LA10_0==IDENT||LA10_0==INTEGER||(LA10_0 >= MOINS && LA10_0 <= MUL)||LA10_0==PLUS||LA10_0==TEXT||LA10_0==APPEL) ) {
+                    alt10=1;
                 }
 
 
-                switch (alt8) {
+                switch (alt10) {
             	case 1 :
-            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:185:15: exp= item_imp[ts]
+            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:206:15: exp= item_imp[ts]
             	    {
-            	    pushFollow(FOLLOW_item_imp_in_impression622);
+            	    pushFollow(FOLLOW_item_imp_in_impression673);
             	    exp=item_imp(ts);
 
             	    state._fsp--;
@@ -1226,12 +1364,12 @@ public class VslTreeExpr extends TreeParser {
             	    break;
 
             	default :
-            	    if ( cnt8 >= 1 ) break loop8;
+            	    if ( cnt10 >= 1 ) break loop10;
                         EarlyExitException eee =
-                            new EarlyExitException(8, input);
+                            new EarlyExitException(10, input);
                         throw eee;
                 }
-                cnt8++;
+                cnt10++;
             } while (true);
 
 
@@ -1256,7 +1394,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "item_imp"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:196:1: item_imp[TableSymboles ts] returns [Expratt exp] : (text= TEXT |exp1= expression[ts] );
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:217:1: item_imp[TableSymboles ts] returns [Expratt exp] : (text= TEXT |exp1= expression[ts] );
     public final Expratt item_imp(TableSymboles ts) throws RecognitionException {
         Expratt exp = null;
 
@@ -1267,28 +1405,28 @@ public class VslTreeExpr extends TreeParser {
 
         exp = null;
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:198:3: (text= TEXT |exp1= expression[ts] )
-            int alt9=2;
-            int LA9_0 = input.LA(1);
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:219:3: (text= TEXT |exp1= expression[ts] )
+            int alt11=2;
+            int LA11_0 = input.LA(1);
 
-            if ( (LA9_0==TEXT) ) {
-                alt9=1;
+            if ( (LA11_0==TEXT) ) {
+                alt11=1;
             }
-            else if ( (LA9_0==DIV||LA9_0==IDENT||LA9_0==INTEGER||(LA9_0 >= MOINS && LA9_0 <= MUL)||LA9_0==PLUS) ) {
-                alt9=2;
+            else if ( (LA11_0==DIV||LA11_0==IDENT||LA11_0==INTEGER||(LA11_0 >= MOINS && LA11_0 <= MUL)||LA11_0==PLUS||LA11_0==APPEL) ) {
+                alt11=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 9, 0, input);
+                    new NoViableAltException("", 11, 0, input);
 
                 throw nvae;
 
             }
-            switch (alt9) {
+            switch (alt11) {
                 case 1 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:198:3: text= TEXT
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:219:3: text= TEXT
                     {
-                    text=(CommonTree)match(input,TEXT,FOLLOW_TEXT_in_item_imp650); 
+                    text=(CommonTree)match(input,TEXT,FOLLOW_TEXT_in_item_imp701); 
 
 
                         String n    = text.getText();
@@ -1301,9 +1439,9 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:205:3: exp1= expression[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:226:3: exp1= expression[ts]
                     {
-                    pushFollow(FOLLOW_expression_in_item_imp658);
+                    pushFollow(FOLLOW_expression_in_item_imp709);
                     exp1=expression(ts);
 
                     state._fsp--;
@@ -1336,7 +1474,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "lecture"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:213:1: lecture[TableSymboles ts] returns [Code code] : ^( READ_KW (c= item_lec[ts] )+ ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:234:1: lecture[TableSymboles ts] returns [Code code] : ^( READ_KW (c= item_lec[ts] )+ ) ;
     public final Code lecture(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1346,29 +1484,29 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:215:3: ( ^( READ_KW (c= item_lec[ts] )+ ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:215:3: ^( READ_KW (c= item_lec[ts] )+ )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:236:3: ( ^( READ_KW (c= item_lec[ts] )+ ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:236:3: ^( READ_KW (c= item_lec[ts] )+ )
             {
-            match(input,READ_KW,FOLLOW_READ_KW_in_lecture681); 
+            match(input,READ_KW,FOLLOW_READ_KW_in_lecture732); 
 
             match(input, Token.DOWN, null); 
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:215:13: (c= item_lec[ts] )+
-            int cnt10=0;
-            loop10:
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:236:13: (c= item_lec[ts] )+
+            int cnt12=0;
+            loop12:
             do {
-                int alt10=2;
-                int LA10_0 = input.LA(1);
+                int alt12=2;
+                int LA12_0 = input.LA(1);
 
-                if ( (LA10_0==IDENT) ) {
-                    alt10=1;
+                if ( (LA12_0==IDENT) ) {
+                    alt12=1;
                 }
 
 
-                switch (alt10) {
+                switch (alt12) {
             	case 1 :
-            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:215:14: c= item_lec[ts]
+            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:236:14: c= item_lec[ts]
             	    {
-            	    pushFollow(FOLLOW_item_lec_in_lecture686);
+            	    pushFollow(FOLLOW_item_lec_in_lecture737);
             	    c=item_lec(ts);
 
             	    state._fsp--;
@@ -1382,12 +1520,12 @@ public class VslTreeExpr extends TreeParser {
             	    break;
 
             	default :
-            	    if ( cnt10 >= 1 ) break loop10;
+            	    if ( cnt12 >= 1 ) break loop12;
                         EarlyExitException eee =
-                            new EarlyExitException(10, input);
+                            new EarlyExitException(12, input);
                         throw eee;
                 }
-                cnt10++;
+                cnt12++;
             } while (true);
 
 
@@ -1412,7 +1550,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "item_lec"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:220:1: item_lec[TableSymboles ts] returns [Code code] : id= IDENT ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:241:1: item_lec[TableSymboles ts] returns [Code code] : id= IDENT ;
     public final Code item_lec(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1421,10 +1559,10 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:222:3: (id= IDENT )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:222:3: id= IDENT
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:243:3: (id= IDENT )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:243:3: id= IDENT
             {
-            id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_item_lec713); 
+            id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_item_lec764); 
 
 
                 String name = id.getText();
@@ -1452,7 +1590,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "conditionnelle"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:231:1: conditionnelle[TableSymboles ts] returns [Code code] : ^( IF_KW exp= expression[ts] c1= instruction[ts] (c2= instruction[ts] )? ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:252:1: conditionnelle[TableSymboles ts] returns [Code code] : ^( IF_KW exp= expression[ts] c1= instruction[ts] (c2= instruction[ts] )? ) ;
     public final Code conditionnelle(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1466,13 +1604,13 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:233:3: ( ^( IF_KW exp= expression[ts] c1= instruction[ts] (c2= instruction[ts] )? ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:233:3: ^( IF_KW exp= expression[ts] c1= instruction[ts] (c2= instruction[ts] )? )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:254:3: ( ^( IF_KW exp= expression[ts] c1= instruction[ts] (c2= instruction[ts] )? ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:254:3: ^( IF_KW exp= expression[ts] c1= instruction[ts] (c2= instruction[ts] )? )
             {
-            match(input,IF_KW,FOLLOW_IF_KW_in_conditionnelle736); 
+            match(input,IF_KW,FOLLOW_IF_KW_in_conditionnelle787); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_expression_in_conditionnelle740);
+            pushFollow(FOLLOW_expression_in_conditionnelle791);
             exp=expression(ts);
 
             state._fsp--;
@@ -1484,7 +1622,7 @@ public class VslTreeExpr extends TreeParser {
                 code.append(new Inst3a(Inst3a.TAC_IFZ, exp.place, tok, null));
               
 
-            pushFollow(FOLLOW_instruction_in_conditionnelle750);
+            pushFollow(FOLLOW_instruction_in_conditionnelle801);
             c1=instruction(ts);
 
             state._fsp--;
@@ -1497,18 +1635,18 @@ public class VslTreeExpr extends TreeParser {
                 code.append(new Inst3a(Inst3a.TAC_LABEL, tok, null, null));    
               
 
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:244:3: (c2= instruction[ts] )?
-            int alt11=2;
-            int LA11_0 = input.LA(1);
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:265:3: (c2= instruction[ts] )?
+            int alt13=2;
+            int LA13_0 = input.LA(1);
 
-            if ( (LA11_0==ASSIGN_KW||LA11_0==IF_KW||LA11_0==PRINT_KW||(LA11_0 >= READ_KW && LA11_0 <= RETURN_KW)||LA11_0==WHILE_KW||LA11_0==BLOC) ) {
-                alt11=1;
+            if ( (LA13_0==ASSIGN_KW||LA13_0==IF_KW||LA13_0==PRINT_KW||(LA13_0 >= READ_KW && LA13_0 <= RETURN_KW)||LA13_0==WHILE_KW||(LA13_0 >= APPEL && LA13_0 <= BLOC)) ) {
+                alt13=1;
             }
-            switch (alt11) {
+            switch (alt13) {
                 case 1 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:244:4: c2= instruction[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:265:4: c2= instruction[ts]
                     {
-                    pushFollow(FOLLOW_instruction_in_conditionnelle760);
+                    pushFollow(FOLLOW_instruction_in_conditionnelle811);
                     c2=instruction(ts);
 
                     state._fsp--;
@@ -1549,7 +1687,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "iteration"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:252:1: iteration[TableSymboles ts] returns [Code code] : ^( WHILE_KW exp= expression[ts] c= instruction[ts] ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:273:1: iteration[TableSymboles ts] returns [Code code] : ^( WHILE_KW exp= expression[ts] c= instruction[ts] ) ;
     public final Code iteration(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1561,23 +1699,38 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:254:3: ( ^( WHILE_KW exp= expression[ts] c= instruction[ts] ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:254:3: ^( WHILE_KW exp= expression[ts] c= instruction[ts] )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:275:3: ( ^( WHILE_KW exp= expression[ts] c= instruction[ts] ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:275:3: ^( WHILE_KW exp= expression[ts] c= instruction[ts] )
             {
-            match(input,WHILE_KW,FOLLOW_WHILE_KW_in_iteration793); 
+            match(input,WHILE_KW,FOLLOW_WHILE_KW_in_iteration844); 
 
             match(input, Token.DOWN, null); 
-            pushFollow(FOLLOW_expression_in_iteration797);
+            pushFollow(FOLLOW_expression_in_iteration848);
             exp=expression(ts);
 
             state._fsp--;
 
 
-            pushFollow(FOLLOW_instruction_in_iteration802);
+
+                Tokatt tok = SymbDistrib.newLabel();    
+                code.append(new Inst3a(Inst3a.TAC_LABEL, tok, null, null));
+                
+                Tokatt tok1 = SymbDistrib.newLabel();
+                code.append(exp.code);
+                code.append(new Inst3a(Inst3a.TAC_IFZ, exp.place, tok1, null));
+              
+
+            pushFollow(FOLLOW_instruction_in_iteration858);
             c=instruction(ts);
 
             state._fsp--;
 
+
+
+                code.append(c);
+                code.append(new Inst3a(Inst3a.TAC_GOTO, tok, null, null));    
+                code.append(new Inst3a(Inst3a.TAC_LABEL, tok1, null, null));
+              
 
             match(input, Token.UP, null); 
 
@@ -1600,7 +1753,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "bloc"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:257:1: bloc[TableSymboles ts] returns [Code code] : ( ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ ) | ^( BLOC c3= declarations[ts] ) | ^( BLOC (c4= instructions[ts] )+ ) );
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:290:1: bloc[TableSymboles ts] returns [Code code] : ( ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ ) | ^( BLOC c3= declarations[ts] ) | ^( BLOC (c4= instructions[ts] )+ ) );
     public final Code bloc(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1616,22 +1769,22 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:259:3: ( ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ ) | ^( BLOC c3= declarations[ts] ) | ^( BLOC (c4= instructions[ts] )+ ) )
-            int alt14=3;
-            alt14 = dfa14.predict(input);
-            switch (alt14) {
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:292:3: ( ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ ) | ^( BLOC c3= declarations[ts] ) | ^( BLOC (c4= instructions[ts] )+ ) )
+            int alt16=3;
+            alt16 = dfa16.predict(input);
+            switch (alt16) {
                 case 1 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:259:3: ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:292:3: ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ )
                     {
-                    match(input,BLOC,FOLLOW_BLOC_in_bloc829); 
+                    match(input,BLOC,FOLLOW_BLOC_in_bloc888); 
 
                     ts.Enter_Scope();
 
                     match(input, Token.DOWN, null); 
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:260:3: (c1= declarations[ts] )
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:260:4: c1= declarations[ts]
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:293:3: (c1= declarations[ts] )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:293:4: c1= declarations[ts]
                     {
-                    pushFollow(FOLLOW_declarations_in_bloc839);
+                    pushFollow(FOLLOW_declarations_in_bloc898);
                     c1=declarations(ts);
 
                     state._fsp--;
@@ -1642,23 +1795,23 @@ public class VslTreeExpr extends TreeParser {
                     }
 
 
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:261:3: (c2= instructions[ts] )+
-                    int cnt12=0;
-                    loop12:
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:294:3: (c2= instructions[ts] )+
+                    int cnt14=0;
+                    loop14:
                     do {
-                        int alt12=2;
-                        int LA12_0 = input.LA(1);
+                        int alt14=2;
+                        int LA14_0 = input.LA(1);
 
-                        if ( (LA12_0==INSTRUCTION) ) {
-                            alt12=1;
+                        if ( (LA14_0==INSTRUCTION) ) {
+                            alt14=1;
                         }
 
 
-                        switch (alt12) {
+                        switch (alt14) {
                     	case 1 :
-                    	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:261:4: c2= instructions[ts]
+                    	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:294:4: c2= instructions[ts]
                     	    {
-                    	    pushFollow(FOLLOW_instructions_in_bloc851);
+                    	    pushFollow(FOLLOW_instructions_in_bloc910);
                     	    c2=instructions(ts);
 
                     	    state._fsp--;
@@ -1670,12 +1823,12 @@ public class VslTreeExpr extends TreeParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt12 >= 1 ) break loop12;
+                    	    if ( cnt14 >= 1 ) break loop14;
                                 EarlyExitException eee =
-                                    new EarlyExitException(12, input);
+                                    new EarlyExitException(14, input);
                                 throw eee;
                         }
-                        cnt12++;
+                        cnt14++;
                     } while (true);
 
 
@@ -1687,12 +1840,12 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 2 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:263:3: ^( BLOC c3= declarations[ts] )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:296:3: ^( BLOC c3= declarations[ts] )
                     {
-                    match(input,BLOC,FOLLOW_BLOC_in_bloc866); 
+                    match(input,BLOC,FOLLOW_BLOC_in_bloc925); 
 
                     match(input, Token.DOWN, null); 
-                    pushFollow(FOLLOW_declarations_in_bloc870);
+                    pushFollow(FOLLOW_declarations_in_bloc929);
                     c3=declarations(ts);
 
                     state._fsp--;
@@ -1706,28 +1859,28 @@ public class VslTreeExpr extends TreeParser {
                     }
                     break;
                 case 3 :
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:264:3: ^( BLOC (c4= instructions[ts] )+ )
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:297:3: ^( BLOC (c4= instructions[ts] )+ )
                     {
-                    match(input,BLOC,FOLLOW_BLOC_in_bloc880); 
+                    match(input,BLOC,FOLLOW_BLOC_in_bloc939); 
 
                     match(input, Token.DOWN, null); 
-                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:264:10: (c4= instructions[ts] )+
-                    int cnt13=0;
-                    loop13:
+                    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:297:10: (c4= instructions[ts] )+
+                    int cnt15=0;
+                    loop15:
                     do {
-                        int alt13=2;
-                        int LA13_0 = input.LA(1);
+                        int alt15=2;
+                        int LA15_0 = input.LA(1);
 
-                        if ( (LA13_0==INSTRUCTION) ) {
-                            alt13=1;
+                        if ( (LA15_0==INSTRUCTION) ) {
+                            alt15=1;
                         }
 
 
-                        switch (alt13) {
+                        switch (alt15) {
                     	case 1 :
-                    	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:264:11: c4= instructions[ts]
+                    	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:297:11: c4= instructions[ts]
                     	    {
-                    	    pushFollow(FOLLOW_instructions_in_bloc885);
+                    	    pushFollow(FOLLOW_instructions_in_bloc944);
                     	    c4=instructions(ts);
 
                     	    state._fsp--;
@@ -1739,12 +1892,12 @@ public class VslTreeExpr extends TreeParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt13 >= 1 ) break loop13;
+                    	    if ( cnt15 >= 1 ) break loop15;
                                 EarlyExitException eee =
-                                    new EarlyExitException(13, input);
+                                    new EarlyExitException(15, input);
                                 throw eee;
                         }
-                        cnt13++;
+                        cnt15++;
                     } while (true);
 
 
@@ -1771,7 +1924,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "instructions"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:267:1: instructions[TableSymboles ts] returns [Code code] : ^( INSTRUCTION (c= instruction[ts] )+ ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:300:1: instructions[TableSymboles ts] returns [Code code] : ^( INSTRUCTION (c= instruction[ts] )+ ) ;
     public final Code instructions(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1781,29 +1934,29 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:269:3: ( ^( INSTRUCTION (c= instruction[ts] )+ ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:269:3: ^( INSTRUCTION (c= instruction[ts] )+ )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:302:3: ( ^( INSTRUCTION (c= instruction[ts] )+ ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:302:3: ^( INSTRUCTION (c= instruction[ts] )+ )
             {
-            match(input,INSTRUCTION,FOLLOW_INSTRUCTION_in_instructions912); 
+            match(input,INSTRUCTION,FOLLOW_INSTRUCTION_in_instructions971); 
 
             match(input, Token.DOWN, null); 
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:269:17: (c= instruction[ts] )+
-            int cnt15=0;
-            loop15:
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:302:17: (c= instruction[ts] )+
+            int cnt17=0;
+            loop17:
             do {
-                int alt15=2;
-                int LA15_0 = input.LA(1);
+                int alt17=2;
+                int LA17_0 = input.LA(1);
 
-                if ( (LA15_0==ASSIGN_KW||LA15_0==IF_KW||LA15_0==PRINT_KW||(LA15_0 >= READ_KW && LA15_0 <= RETURN_KW)||LA15_0==WHILE_KW||LA15_0==BLOC) ) {
-                    alt15=1;
+                if ( (LA17_0==ASSIGN_KW||LA17_0==IF_KW||LA17_0==PRINT_KW||(LA17_0 >= READ_KW && LA17_0 <= RETURN_KW)||LA17_0==WHILE_KW||(LA17_0 >= APPEL && LA17_0 <= BLOC)) ) {
+                    alt17=1;
                 }
 
 
-                switch (alt15) {
+                switch (alt17) {
             	case 1 :
-            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:269:18: c= instruction[ts]
+            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:302:18: c= instruction[ts]
             	    {
-            	    pushFollow(FOLLOW_instruction_in_instructions917);
+            	    pushFollow(FOLLOW_instruction_in_instructions976);
             	    c=instruction(ts);
 
             	    state._fsp--;
@@ -1817,12 +1970,12 @@ public class VslTreeExpr extends TreeParser {
             	    break;
 
             	default :
-            	    if ( cnt15 >= 1 ) break loop15;
+            	    if ( cnt17 >= 1 ) break loop17;
                         EarlyExitException eee =
-                            new EarlyExitException(15, input);
+                            new EarlyExitException(17, input);
                         throw eee;
                 }
-                cnt15++;
+                cnt17++;
             } while (true);
 
 
@@ -1847,7 +2000,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "declarations"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:274:1: declarations[TableSymboles ts] returns [Code code] : ^( DECLARATION (c= item_dec[ts] )+ ) ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:307:1: declarations[TableSymboles ts] returns [Code code] : ^( DECLARATION (c= item_dec[ts] )+ ) ;
     public final Code declarations(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1857,29 +2010,29 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:276:3: ( ^( DECLARATION (c= item_dec[ts] )+ ) )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:276:3: ^( DECLARATION (c= item_dec[ts] )+ )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:309:3: ( ^( DECLARATION (c= item_dec[ts] )+ ) )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:309:3: ^( DECLARATION (c= item_dec[ts] )+ )
             {
-            match(input,DECLARATION,FOLLOW_DECLARATION_in_declarations942); 
+            match(input,DECLARATION,FOLLOW_DECLARATION_in_declarations1001); 
 
             match(input, Token.DOWN, null); 
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:276:17: (c= item_dec[ts] )+
-            int cnt16=0;
-            loop16:
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:309:17: (c= item_dec[ts] )+
+            int cnt18=0;
+            loop18:
             do {
-                int alt16=2;
-                int LA16_0 = input.LA(1);
+                int alt18=2;
+                int LA18_0 = input.LA(1);
 
-                if ( (LA16_0==IDENT) ) {
-                    alt16=1;
+                if ( (LA18_0==IDENT) ) {
+                    alt18=1;
                 }
 
 
-                switch (alt16) {
+                switch (alt18) {
             	case 1 :
-            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:276:18: c= item_dec[ts]
+            	    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:309:18: c= item_dec[ts]
             	    {
-            	    pushFollow(FOLLOW_item_dec_in_declarations947);
+            	    pushFollow(FOLLOW_item_dec_in_declarations1006);
             	    c=item_dec(ts);
 
             	    state._fsp--;
@@ -1891,12 +2044,12 @@ public class VslTreeExpr extends TreeParser {
             	    break;
 
             	default :
-            	    if ( cnt16 >= 1 ) break loop16;
+            	    if ( cnt18 >= 1 ) break loop18;
                         EarlyExitException eee =
-                            new EarlyExitException(16, input);
+                            new EarlyExitException(18, input);
                         throw eee;
                 }
-                cnt16++;
+                cnt18++;
             } while (true);
 
 
@@ -1921,7 +2074,7 @@ public class VslTreeExpr extends TreeParser {
 
 
     // $ANTLR start "item_dec"
-    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:279:1: item_dec[TableSymboles ts] returns [Code code] : id= IDENT ;
+    // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:312:1: item_dec[TableSymboles ts] returns [Code code] : id= IDENT ;
     public final Code item_dec(TableSymboles ts) throws RecognitionException {
         Code code = null;
 
@@ -1930,10 +2083,10 @@ public class VslTreeExpr extends TreeParser {
 
         code = new Code();
         try {
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:281:3: (id= IDENT )
-            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:281:3: id= IDENT
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:314:3: (id= IDENT )
+            // /home/heyoen/workspace/VSL/bin/frontend/VslTreeExpr.g:314:3: id= IDENT
             {
-            id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_item_dec977); 
+            id=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_item_dec1036); 
 
 
                 String name = id.getText();
@@ -1959,20 +2112,20 @@ public class VslTreeExpr extends TreeParser {
     // Delegated rules
 
 
-    protected DFA14 dfa14 = new DFA14(this);
-    static final String DFA14_eotS =
+    protected DFA16 dfa16 = new DFA16(this);
+    static final String DFA16_eotS =
         "\12\uffff";
-    static final String DFA14_eofS =
+    static final String DFA16_eofS =
         "\12\uffff";
-    static final String DFA14_minS =
+    static final String DFA16_minS =
         "\1\47\1\2\1\52\1\2\1\uffff\1\21\2\3\2\uffff";
-    static final String DFA14_maxS =
+    static final String DFA16_maxS =
         "\1\47\1\2\1\53\1\2\1\uffff\2\21\1\53\2\uffff";
-    static final String DFA14_acceptS =
+    static final String DFA16_acceptS =
         "\4\uffff\1\3\3\uffff\1\1\1\2";
-    static final String DFA14_specialS =
+    static final String DFA16_specialS =
         "\12\uffff}>";
-    static final String[] DFA14_transitionS = {
+    static final String[] DFA16_transitionS = {
             "\1\1",
             "\1\2",
             "\1\3\1\4",
@@ -1985,37 +2138,37 @@ public class VslTreeExpr extends TreeParser {
             ""
     };
 
-    static final short[] DFA14_eot = DFA.unpackEncodedString(DFA14_eotS);
-    static final short[] DFA14_eof = DFA.unpackEncodedString(DFA14_eofS);
-    static final char[] DFA14_min = DFA.unpackEncodedStringToUnsignedChars(DFA14_minS);
-    static final char[] DFA14_max = DFA.unpackEncodedStringToUnsignedChars(DFA14_maxS);
-    static final short[] DFA14_accept = DFA.unpackEncodedString(DFA14_acceptS);
-    static final short[] DFA14_special = DFA.unpackEncodedString(DFA14_specialS);
-    static final short[][] DFA14_transition;
+    static final short[] DFA16_eot = DFA.unpackEncodedString(DFA16_eotS);
+    static final short[] DFA16_eof = DFA.unpackEncodedString(DFA16_eofS);
+    static final char[] DFA16_min = DFA.unpackEncodedStringToUnsignedChars(DFA16_minS);
+    static final char[] DFA16_max = DFA.unpackEncodedStringToUnsignedChars(DFA16_maxS);
+    static final short[] DFA16_accept = DFA.unpackEncodedString(DFA16_acceptS);
+    static final short[] DFA16_special = DFA.unpackEncodedString(DFA16_specialS);
+    static final short[][] DFA16_transition;
 
     static {
-        int numStates = DFA14_transitionS.length;
-        DFA14_transition = new short[numStates][];
+        int numStates = DFA16_transitionS.length;
+        DFA16_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA14_transition[i] = DFA.unpackEncodedString(DFA14_transitionS[i]);
+            DFA16_transition[i] = DFA.unpackEncodedString(DFA16_transitionS[i]);
         }
     }
 
-    class DFA14 extends DFA {
+    class DFA16 extends DFA {
 
-        public DFA14(BaseRecognizer recognizer) {
+        public DFA16(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 14;
-            this.eot = DFA14_eot;
-            this.eof = DFA14_eof;
-            this.min = DFA14_min;
-            this.max = DFA14_max;
-            this.accept = DFA14_accept;
-            this.special = DFA14_special;
-            this.transition = DFA14_transition;
+            this.decisionNumber = 16;
+            this.eot = DFA16_eot;
+            this.eof = DFA16_eof;
+            this.min = DFA16_min;
+            this.max = DFA16_max;
+            this.accept = DFA16_accept;
+            this.special = DFA16_special;
+            this.transition = DFA16_transition;
         }
         public String getDescription() {
-            return "257:1: bloc[TableSymboles ts] returns [Code code] : ( ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ ) | ^( BLOC c3= declarations[ts] ) | ^( BLOC (c4= instructions[ts] )+ ) );";
+            return "290:1: bloc[TableSymboles ts] returns [Code code] : ( ^( BLOC (c1= declarations[ts] ) (c2= instructions[ts] )+ ) | ^( BLOC c3= declarations[ts] ) | ^( BLOC (c4= instructions[ts] )+ ) );";
         }
     }
  
@@ -2045,53 +2198,59 @@ public class VslTreeExpr extends TreeParser {
     public static final BitSet FOLLOW_impression_in_instruction345 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_lecture_in_instruction354 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_conditionnelle_in_instruction364 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_iteration_in_instruction376 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_bloc_in_instruction386 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ASSIGN_KW_in_affectation409 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_IDENT_in_affectation413 = new BitSet(new long[]{0x0000000008CA1000L});
-    public static final BitSet FOLLOW_expression_in_affectation417 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PLUS_in_expression445 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression449 = new BitSet(new long[]{0x0000000008CA1000L});
-    public static final BitSet FOLLOW_expression_in_expression454 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MOINS_in_expression465 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression469 = new BitSet(new long[]{0x0000000008CA1000L});
-    public static final BitSet FOLLOW_expression_in_expression474 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MUL_in_expression484 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression488 = new BitSet(new long[]{0x0000000008CA1000L});
-    public static final BitSet FOLLOW_expression_in_expression493 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_DIV_in_expression503 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_expression507 = new BitSet(new long[]{0x0000000008CA1000L});
-    public static final BitSet FOLLOW_expression_in_expression512 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_facteur_in_expression525 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IDENT_in_facteur558 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INTEGER_in_facteur566 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RETURN_KW_in_retourne589 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_retourne593 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_PRINT_KW_in_impression617 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_item_imp_in_impression622 = new BitSet(new long[]{0x0000000108CA1008L});
-    public static final BitSet FOLLOW_TEXT_in_item_imp650 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_expression_in_item_imp658 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_READ_KW_in_lecture681 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_item_lec_in_lecture686 = new BitSet(new long[]{0x0000000000020008L});
-    public static final BitSet FOLLOW_IDENT_in_item_lec713 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IF_KW_in_conditionnelle736 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_conditionnelle740 = new BitSet(new long[]{0x00000090D0040080L});
-    public static final BitSet FOLLOW_instruction_in_conditionnelle750 = new BitSet(new long[]{0x00000090D0040088L});
-    public static final BitSet FOLLOW_instruction_in_conditionnelle760 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_WHILE_KW_in_iteration793 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_expression_in_iteration797 = new BitSet(new long[]{0x00000090D0040080L});
-    public static final BitSet FOLLOW_instruction_in_iteration802 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_BLOC_in_bloc829 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_declarations_in_bloc839 = new BitSet(new long[]{0x0000080000000000L});
-    public static final BitSet FOLLOW_instructions_in_bloc851 = new BitSet(new long[]{0x0000080000000008L});
-    public static final BitSet FOLLOW_BLOC_in_bloc866 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_declarations_in_bloc870 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_BLOC_in_bloc880 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_instructions_in_bloc885 = new BitSet(new long[]{0x0000080000000008L});
-    public static final BitSet FOLLOW_INSTRUCTION_in_instructions912 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_instruction_in_instructions917 = new BitSet(new long[]{0x00000090D0040088L});
-    public static final BitSet FOLLOW_DECLARATION_in_declarations942 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_item_dec_in_declarations947 = new BitSet(new long[]{0x0000000000020008L});
-    public static final BitSet FOLLOW_IDENT_in_item_dec977 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_APPEL_in_instruction372 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_IDENT_in_instruction376 = new BitSet(new long[]{0x0000004008CA1008L});
+    public static final BitSet FOLLOW_expression_in_instruction386 = new BitSet(new long[]{0x0000004008CA1008L});
+    public static final BitSet FOLLOW_iteration_in_instruction400 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_bloc_in_instruction410 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ASSIGN_KW_in_affectation433 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_IDENT_in_affectation437 = new BitSet(new long[]{0x0000004008CA1000L});
+    public static final BitSet FOLLOW_expression_in_affectation441 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PLUS_in_expression469 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression473 = new BitSet(new long[]{0x0000004008CA1000L});
+    public static final BitSet FOLLOW_expression_in_expression478 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_MOINS_in_expression489 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression493 = new BitSet(new long[]{0x0000004008CA1000L});
+    public static final BitSet FOLLOW_expression_in_expression498 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_MUL_in_expression508 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression512 = new BitSet(new long[]{0x0000004008CA1000L});
+    public static final BitSet FOLLOW_expression_in_expression517 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_DIV_in_expression527 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_expression531 = new BitSet(new long[]{0x0000004008CA1000L});
+    public static final BitSet FOLLOW_expression_in_expression536 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_facteur_in_expression549 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IDENT_in_facteur582 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INTEGER_in_facteur590 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_APPEL_in_facteur597 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_IDENT_in_facteur601 = new BitSet(new long[]{0x0000004008CA1008L});
+    public static final BitSet FOLLOW_expression_in_facteur611 = new BitSet(new long[]{0x0000004008CA1008L});
+    public static final BitSet FOLLOW_RETURN_KW_in_retourne640 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_retourne644 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_PRINT_KW_in_impression668 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_item_imp_in_impression673 = new BitSet(new long[]{0x0000004108CA1008L});
+    public static final BitSet FOLLOW_TEXT_in_item_imp701 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expression_in_item_imp709 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_READ_KW_in_lecture732 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_item_lec_in_lecture737 = new BitSet(new long[]{0x0000000000020008L});
+    public static final BitSet FOLLOW_IDENT_in_item_lec764 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IF_KW_in_conditionnelle787 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_conditionnelle791 = new BitSet(new long[]{0x000000D0D0040080L});
+    public static final BitSet FOLLOW_instruction_in_conditionnelle801 = new BitSet(new long[]{0x000000D0D0040088L});
+    public static final BitSet FOLLOW_instruction_in_conditionnelle811 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_WHILE_KW_in_iteration844 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_expression_in_iteration848 = new BitSet(new long[]{0x000000D0D0040080L});
+    public static final BitSet FOLLOW_instruction_in_iteration858 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_BLOC_in_bloc888 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_declarations_in_bloc898 = new BitSet(new long[]{0x0000080000000000L});
+    public static final BitSet FOLLOW_instructions_in_bloc910 = new BitSet(new long[]{0x0000080000000008L});
+    public static final BitSet FOLLOW_BLOC_in_bloc925 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_declarations_in_bloc929 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_BLOC_in_bloc939 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_instructions_in_bloc944 = new BitSet(new long[]{0x0000080000000008L});
+    public static final BitSet FOLLOW_INSTRUCTION_in_instructions971 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_instruction_in_instructions976 = new BitSet(new long[]{0x000000D0D0040088L});
+    public static final BitSet FOLLOW_DECLARATION_in_declarations1001 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_item_dec_in_declarations1006 = new BitSet(new long[]{0x0000000000020008L});
+    public static final BitSet FOLLOW_IDENT_in_item_dec1036 = new BitSet(new long[]{0x0000000000000002L});
 
 }
